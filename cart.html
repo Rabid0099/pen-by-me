@@ -191,31 +191,40 @@
                 // Save file
                 XLSX.writeFile(wb, filename);
 
-                // Clear cart and show success message
-                localStorage.removeItem('cart');
-                alert('Order saved to Excel file on your computer! Your cart has been cleared.');
-                loadCart();
+                // Send to Google Sheet
+                const googleSheetURL = 'https://script.google.com/macros/s/AKfycbwCLaiRHeLpr82m0nXeguR9ID0qIhRzXC3WyxfJ-OXKNdHnI4yrYctht8JgMjBVUZXX/usercallback';
+                
+                const googleSheetData = {
+                    customerName,
+                    customerEmail,
+                    customerPhone,
+                    products: cart,
+                    totalAmount
+                };
 
-                // Optional backup: attempt to send to server if available, otherwise ignore.
-                // This is not required for successful customer order saving in Excel.
                 if (navigator.onLine) {
-                    fetch('/api/orders', {
+                    fetch(googleSheetURL, {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            customerName,
-                            customerEmail,
-                            customerPhone,
-                            cartItems: cart,
-                            totalAmount
-                        })
-                    }).catch(error => {
-                        console.log('Backend is offline or unavailable; order is already saved locally in Excel:', error);
+                        body: JSON.stringify(googleSheetData)
+                    })
+                    .then(response => {
+                        // Clear cart and show success message
+                        localStorage.removeItem('cart');
+                        alert('✅ Order successfully saved to Google Sheet!\n✅ Excel file also saved on your computer!\nYour cart has been cleared.');
+                        loadCart();
+                    })
+                    .catch(error => {
+                        console.error('Error sending to Google Sheet:', error);
+                        // Still clear cart since Excel was saved
+                        localStorage.removeItem('cart');
+                        alert('Order saved locally to Excel! Google Sheet sync failed, but you can retry later.');
+                        loadCart();
                     });
                 } else {
-                    console.log('Offline: no backend request sent; order saved locally in Excel.');
+                    // Offline mode
+                    localStorage.removeItem('cart');
+                    alert('📱 Offline mode: Order saved to Excel only.\nWill sync to Google Sheet when online.');
+                    loadCart();
                 }
             });
 
