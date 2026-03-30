@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart — Matador Pen</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">MATADOR</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="search-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+            </div>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="container">
+            <h1>SHOPPING CART</h1>
+        </div>
+    </header>
+
+    <main class="container featured">
+        <div class="cart-wrapper">
+            <div id="cart-items" class="cart-container">
+                <!-- Cart items will be loaded here -->
+            </div>
+
+            <div id="checkout-section" class="checkout-section" style="display:none;">
+                <h2>Complete Your Order</h2>
+                <form id="checkout-form">
+                    <input type="text" id="customerName" placeholder="Full Name" required>
+                    <input type="email" id="customerEmail" placeholder="Email Address" required>
+                    <input type="tel" id="customerPhone" placeholder="Phone Number" required>
+                    <button type="submit" class="cta-button">Place Order</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Matador Pens. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#">Facebook</a>
+                <a href="#">Instagram</a>
+                <a href="#">Twitter</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const checkoutSection = document.getElementById('checkout-section');
+            const checkoutForm = document.getElementById('checkout-form');
+
+            function loadCart() {
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                cartItemsContainer.innerHTML = '';
+
+                if (cart.length === 0) {
+                    cartItemsContainer.innerHTML = `
+                        <div class="empty-cart">
+                            <div class="empty-cart-icon">🛒</div>
+                            <h3>Your cart is empty</h3>
+                            <p>Discover our premium collection of pens and add some to your cart!</p>
+                            <a href="products.html" class="cta-button">Continue Shopping</a>
+                        </div>
+                    `;
+                    checkoutSection.style.display = 'none';
+                    return;
+                }
+
+                let total = 0;
+                cart.forEach((item, index) => {
+                    total += item.price * item.quantity;
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'cart-item';
+                    itemDiv.innerHTML = `
+                        <div class="cart-item-image" style="background-image:url('${item.image}'); background-size:contain; background-position:center; background-repeat:no-repeat;"></div>
+                        <div class="cart-item-details">
+                            <h3>${item.name}</h3>
+                            <p><strong>Price:</strong> $${item.price}</p>
+                            <div class="quantity-controls">
+                                <label><strong>Quantity:</strong></label>
+                                <input type="number" value="${item.quantity}" min="1" onchange="updateQuantity(${index}, this.value)">
+                            </div>
+                            <p><strong>Subtotal:</strong> $${(item.price * item.quantity).toFixed(2)}</p>
+                            <button onclick="removeFromCart(${index})" class="remove-btn">
+                                <span>🗑️</span> Remove
+                            </button>
+                        </div>
+                    `;
+                    cartItemsContainer.appendChild(itemDiv);
+                });
+
+                const totalDiv = document.createElement('div');
+                totalDiv.className = 'cart-total';
+                totalDiv.innerHTML = `<h3>Total: $${total.toFixed(2)}</h3>`;
+                cartItemsContainer.appendChild(totalDiv);
+
+                checkoutSection.style.display = 'block';
+            }
+
+            window.updateQuantity = function(index, quantity) {
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                cart[index].quantity = parseInt(quantity);
+                localStorage.setItem('cart', JSON.stringify(cart));
+                loadCart();
+            };
+
+            window.removeFromCart = function(index) {
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                cart.splice(index, 1);
+                localStorage.setItem('cart', JSON.stringify(cart));
+                loadCart();
+            };
+
+            checkoutForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const customerName = document.getElementById('customerName').value;
+                const customerEmail = document.getElementById('customerEmail').value;
+                const customerPhone = document.getElementById('customerPhone').value;
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                const totalAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+                // Create order data for Excel
+                const orderData = {
+                    customerName,
+                    customerEmail,
+                    customerPhone,
+                    totalAmount,
+                    orderDate: new Date().toLocaleString(),
+                    items: cart.map(item => ({
+                        'Product Name': item.name,
+                        'Price': item.price,
+                        'Quantity': item.quantity,
+                        'Subtotal': item.price * item.quantity
+                    }))
+                };
+
+                // Create Excel file
+                const wb = XLSX.utils.book_new();
+                
+                // Customer info sheet
+                const customerInfo = [
+                    ['Order Information'],
+                    ['Customer Name', orderData.customerName],
+                    ['Email', orderData.customerEmail],
+                    ['Phone', orderData.customerPhone],
+                    ['Total Amount', '$' + orderData.totalAmount.toFixed(2)],
+                    ['Order Date', orderData.orderDate],
+                    [''],
+                    ['Items Ordered']
+                ];
+                
+                // Add item headers
+                customerInfo.push(['Product Name', 'Price', 'Quantity', 'Subtotal']);
+                
+                // Add each item
+                orderData.items.forEach(item => {
+                    customerInfo.push([
+                        item['Product Name'],
+                        '$' + item['Price'],
+                        item['Quantity'],
+                        '$' + item['Subtotal']
+                    ]);
+                });
+
+                const ws1 = XLSX.utils.aoa_to_sheet(customerInfo);
+                XLSX.utils.book_append_sheet(wb, ws1, 'Order Details');
+
+                // Generate filename with timestamp
+                const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+                const filename = `Matador_Order_${timestamp}.xlsx`;
+
+                // Save file
+                XLSX.writeFile(wb, filename);
+
+                // Clear cart and show success message
+                localStorage.removeItem('cart');
+                alert('Order saved to Excel file on your computer! Your cart has been cleared.');
+                loadCart();
+
+                // Optional backup: attempt to send to server if available, otherwise ignore.
+                // This is not required for successful customer order saving in Excel.
+                if (navigator.onLine) {
+                    fetch('/api/orders', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            customerName,
+                            customerEmail,
+                            customerPhone,
+                            cartItems: cart,
+                            totalAmount
+                        })
+                    }).catch(error => {
+                        console.log('Backend is offline or unavailable; order is already saved locally in Excel:', error);
+                    });
+                } else {
+                    console.log('Offline: no backend request sent; order saved locally in Excel.');
+                }
+            });
+
+            loadCart();
+        });
+    </script>
+</body>
+</html>

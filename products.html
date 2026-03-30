@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products — Matador Pen</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">MATADOR</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="search-icon" title="Click to focus search">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+            </div>
+            <div class="search-container">
+                <input id="searchInput" type="search" placeholder="Search pens by name..." aria-label="Search products">
+            </div>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="container">
+            <h1>OUR BALL PEN</h1>
+            <!-- <p>Discover our premium collection of ball pens, crafted with precision and elegance.</p> -->
+        </div>
+    </header>
+
+    <main class="container featured">
+        <div class="products-grid">
+            <a href="Matador Claro.html" class="product-card-link">
+                <div class="product-card">
+                    <div class="product-image has-photo silver-pen" style="background-image:url('product_pen_pic/Claro.jpg'); background-size:contain; background-position:center; background-repeat:no-repeat;"></div>
+                    <h3>Matador Claro</h3>
+                    <p class="price">$9</p>
+                    <!-- <p class="description">Timeless elegance with superior grip control</p> -->
+                    <button class="add-cart" onclick="addToCart(1); event.preventDefault();">Add to Cart</button>
+                </div>
+            </a>
+
+            <a href="Matador Smoothy Ballpen.html" class="product-card-link">
+                <div class="product-card">
+                    <div class="product-image black-pen" style="background-image:url('product_pen_pic/Matador Smoothy Ballpen.jpg'); background-size:contain; background-position:center; background-repeat:no-repeat;"></div>
+                    <h3>Matador Smoothy Ballpen</h3>
+                    <p class="price">$129.99</p>
+                    <!-- <p class="description">Premium brushed steel finishing</p> -->
+                    <button class="add-cart" onclick="addToCart(2); event.preventDefault();">Add to Cart</button>
+                </div>
+            </a>
+
+            <a href="Matador All-time.html" class="product-card-link">
+                <div class="product-card">
+                    <div class="product-image gold-pen" style="background-image:url('product_pen_pic/Matador All-time.jpg'); background-size:contain; background-position:center; background-repeat:no-repeat;"></div>
+                    <h3>Matador All-time</h3>
+                    <p class="price">$159.99</p>
+                    <!-- <p class="description">Limited edition with 24K gold plating</p> -->
+                    <button class="add-cart" onclick="addToCart(3); event.preventDefault();">Add to Cart</button>
+                </div>
+            </a>
+
+            <a href="Matador Envoy.html" class="product-card-link">
+                <div class="product-card">
+                    <div class="product-image rose-gold-pen" style="background-image:url('product_pen_pic/Matador Envoy.jpg'); background-size:contain; background-position:center; background-repeat:no-repeat;"></div>
+                    <h3>Matador Envoy</h3>
+                    <p class="price">$149.99</p>
+                    <!-- <p class="description">Elegant rose-tinted premium finish</p> -->
+                    <button class="add-cart" onclick="addToCart(4); event.preventDefault();">Add to Cart</button>
+                </div>
+            </a>
+
+            <a href="Matador Glory Crystal.html" class="product-card-link">
+                <div class="product-card">
+                    <div class="product-image blue-pen" style="background-image:url('product_pen_pic/Matador Glory Crystal.png'); background-size:contain; background-position:center; background-repeat:no-repeat;"></div>
+                    <h3>Matador Glory Crystal</h3>
+                    <p class="price">$119.99</p>
+                    <!-- <p class="description">Deep ocean blue with chrome accents</p> -->
+                    <button class="add-cart" onclick="addToCart(5); event.preventDefault();">Add to Cart</button>
+                </div>
+            </a>
+
+            <a href="Matador Gripper Gel.html" class="product-card-link">
+                <div class="product-card">
+                    <div class="product-image gray-pen" style="background-image:url('product_pen_pic/Matador Gripper Gel.png'); background-size:contain; background-position:center; background-repeat:no-repeat;"></div>
+                    <h3>Matador Gripper Gel</h3>
+                    <p class="price">$109.99</p>
+                    <!-- <p class="description">Modern matte finish with precision tip</p> -->
+                    <button class="add-cart" onclick="addToCart(6); event.preventDefault();">Add to Cart</button>
+                </div>
+            </a>
+
+            <a href="Matador Hi-School.html" class="product-card-link">
+                <div class="product-card">
+                    <div class="product-image green-pen" style="background-image:url('product_pen_pic/Matador Hi-School.jpg'); background-size:contain; background-position:center; background-repeat:no-repeat;"></div>
+                    <h3>Matador Hi-School</h3>
+                    <p class="price">$139.99</p>
+                    <!-- <p class="description">Luxurious green with golden accents</p> -->
+                    <button class="add-cart" onclick="addToCart(7); event.preventDefault();">Add to Cart</button>
+                </div>
+            </a>
+
+            <a href="Matador i-teen Rio.html" class="product-card-link">
+                <div class="product-card">
+                    <div class="product-image red-pen" style="background-image:url('product_pen_pic/Matador i-teen Rio.jpg'); background-size:contain; background-position:center; background-repeat:no-repeat;"></div>
+                    <h3>Matador i-teen Rio</h3>
+                    <p class="price">$124.99</p>
+                    <!-- <p class="description">Rich burgundy with stainless steel trim</p> -->
+                    <button class="add-cart" onclick="addToCart(8); event.preventDefault();">Add to Cart</button>
+                </div>
+            </a>
+
+            <a href="Matador i-teen.html" class="product-card-link">
+                <div class="product-card">
+                    <div class="product-image white-pen" style="background-image:url('product_pen_pic/Matador i-teen Aroma.jpg'); background-size:contain; background-position:center; background-repeat:no-repeat;"></div>
+                    <h3>Matador i-teen</h3>
+                    <p class="price">$114.99</p>
+                    <!-- <p class="description">Pristine white with pearl finish</p> -->
+                    <button class="add-cart" onclick="addToCart(9); event.preventDefault();">Add to Cart</button>
+                </div>
+            </a>
+
+            <a href="Matador Orbit.html" class="product-card-link">
+                <div class="product-card">
+                    <div class="product-image bronze-pen" style="background-image:url('product_pen_pic/Matador Orbit.png'); background-size:contain; background-position:center; background-repeat:no-repeat;"></div>
+                    <h3>Matador Orbit</h3>
+                    <p class="price">$11.99</p>
+                    <!-- <p class="description">Antique bronze with vintage appeal</p> -->
+                    <button class="add-cart" onclick="addToCart(10); event.preventDefault();">Add to Cart</button>
+                </div>
+            </a>
+
+            <a href="Matador Pencilic.html" class="product-card-link">
+                <div class="product-card">
+                    <div class="product-image copper-pen" style="background-image:url('product_pen_pic/Matador Pencilic.png'); background-size:contain; background-position:center; background-repeat:no-repeat;"></div>
+                    <h3>Matador Pencilic</h3>
+                    <p class="price">$14.99</p>
+                    <!-- <p class="description">Polished copper with natural patina</p> -->
+                    <button class="add-cart" onclick="addToCart(11); event.preventDefault();">Add to Cart</button>
+                </div>
+            </a>
+
+            <a href="Matador Pin-Point.html" class="product-card-link">
+                <div class="product-card">
+                    <div class="product-image charcoal-pen" style="background-image:url('product_pen_pic/Matador Pin-Point.png'); background-size:contain; background-position:center; background-repeat:no-repeat;"></div>
+                    <h3>Matador Pin-Point</h3>
+                    <p class="price">$144.99</p>
+                    <!-- <p class="description">Professional grade with textured grip</p> -->
+                    <button class="add-cart" onclick="addToCart(12); event.preventDefault();">Add to Cart</button>
+                </div>
+            </a>
+
+            <a href="Matador Radiant.html" class="product-card-link">
+                <div class="product-card">
+                    <div class="product-image sapphire-pen" style="background-image:url('product_pen_pic/Matador Radiant.png'); background-size:contain; background-position:center; background-repeat:no-repeat;"></div>
+                    <h3>Matador Radiant</h3>
+                    <p class="price">$154.99</p>
+                    <!-- <p class="description">Deep sapphire with diamond-cut design</p> -->
+                    <button class="add-cart" onclick="addToCart(13); event.preventDefault();">Add to Cart</button>
+                </div>
+            </a>
+
+            <a href="Matador I-teen Bloom.html" class="product-card-link">
+                <div class="product-card">
+                    <div class="product-image platinum-pen" style="background-image:url('product_pen_pic/Matador Trio.png'); background-size:contain; background-position:center; background-repeat:no-repeat;"></div>
+                    <h3>Matador I-teen Bloom</h3>
+                    <p class="price">$8.99</p>
+                    <!-- <p class="description">Premium platinum-coated luxury pen</p> -->
+                    <button class="add-cart" onclick="addToCart(14); event.preventDefault();">Add to Cart</button>
+                </div>
+            </a>
+
+            <a href="Matador i-teen Grip.html" class="product-card-link">
+                <div class="product-card">
+                    <div class="product-image carbon-pen" style="background-image:url('product_pen_pic/Matador i-teen Aroma.jpg'); background-size:contain; background-position:center; background-repeat:no-repeat;"></div>
+                    <h3>Matador i-teen Grip</h3>
+                    <p class="price">$179.99</p>
+                    <!-- <p class="description">Carbon fiber construction for ultimate performance</p> -->
+                    <button class="add-cart" onclick="addToCart(15); event.preventDefault();">Add to Cart</button>
+                </div>
+            </a>
+        </div>
+    </main>
+
+    <p id="noResultsMessage" class="no-results" style="display:none; text-align:center; margin:20px 0; color: #a00; font-weight:bold;">No products found for this search.</p>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Matador Pens. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#">Facebook</a>
+                <a href="#">Instagram</a>
+                <a href="#">Twitter</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var searchInput = document.getElementById('searchInput');
+            var productLinks = Array.from(document.querySelectorAll('.product-card-link'));
+            var noResults = document.getElementById('noResultsMessage');
+            var searchIcon = document.querySelector('.search-icon');
+
+            function updateSearch() {
+                var query = (searchInput.value || '').trim().toLowerCase();
+                var visibleCount = 0;
+                productLinks.forEach(function (link) {
+                    var title = (link.querySelector('.product-card h3') || {}).textContent || '';
+                    if (!query || title.toLowerCase().includes(query)) {
+                        link.style.display = '';
+                        visibleCount++;
+                    } else {
+                        link.style.display = 'none';
+                    }
+                });
+
+                noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+            }
+
+            if (searchInput) {
+                searchInput.addEventListener('input', updateSearch);
+                updateSearch();
+            }
+
+            if (searchIcon && searchInput) {
+                searchIcon.addEventListener('click', function () {
+                    searchInput.focus();
+                });
+            }
+        });
+
+        function addToCart(productId) {
+            // Get product data from API
+            fetch('/api/products/' + productId)
+                .then(response => response.json())
+                .then(product => {
+                    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                    const existingItem = cart.find(item => item.id === product.id);
+                    if (existingItem) {
+                        existingItem.quantity += 1;
+                    } else {
+                        cart.push({ ...product, quantity: 1 });
+                    }
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    alert(product.name + ' added to cart!');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error adding to cart. Please try again.');
+                });
+        }
+    </script>
+</body>
+</html>

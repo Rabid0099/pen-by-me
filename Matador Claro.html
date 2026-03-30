@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matador Claro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">MATADOR</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="search-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+            </div>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="container">
+            <h1>Matador Claro</h1>
+            <!-- <p>Timeless elegance with superior grip control</p> -->
+        </div>
+    </header>
+
+    <main class="container featured">
+        <div class="product-detail">
+            <div class="product-image-large black-pen" style="background-image:url('product_pen_pic/Claro.jpg'); background-size:contain; background-position:center; background-repeat:no-repeat;"></div>
+            <div class="product-info">
+                <h2>Matador Claro</h2>
+                <p class="price-large">$89.99</p>
+                <!-- <p class="description-full">Timeless elegance with superior grip control. This classic black pen is the perfect choice for professionals and everyday users who appreciate simplicity and reliability. Crafted with precision, it delivers a smooth writing experience every time.</p> -->
+                
+                <div class="product-specs">
+                    <h3>Features:</h3>
+                    <ul>
+                        <li>Crystal clear body</li>
+                        <li>Non slip rubber grip</li>
+                        <li>Ultra-smooth writing with oil gel ink</li>
+                        <li>Waxed tip for extended shelf life</li>
+                        <li>0.6 mm NS tip with TC ball</li>
+                        <li>Shelf life: 2 years</li>
+                        <li>Black,Blue,Red</li>
+                    </ul>
+                </div>
+
+                <div class="product-specs_size">
+                    <h3>Pack Size:</h3>
+                    <ul>
+                        <li>6 pcs/pouch</li>
+                        <li>1728 pcs/carton</li>
+                    </ul>
+                </div>
+
+                <button class="add-cart-large" onclick="addToCart(1)">Add to Cart</button>
+                <a href="products.html" class="back-link">← Back to Products</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Matador Pens. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#">Facebook</a>
+                <a href="#">Instagram</a>
+                <a href="#">Twitter</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function addToCart(productId) {
+            // Get product data from API
+            fetch('/api/products/' + productId)
+                .then(response => response.json())
+                .then(product => {
+                    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                    const existingItem = cart.find(item => item.id === product.id);
+                    if (existingItem) {
+                        existingItem.quantity += 1;
+                    } else {
+                        cart.push({ ...product, quantity: 1 });
+                    }
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    alert(product.name + ' added to cart!');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error adding to cart. Please try again.');
+                });
+        }
+    </script>
+
+</body>
+</html>
