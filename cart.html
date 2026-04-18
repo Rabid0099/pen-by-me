@@ -94,12 +94,12 @@
                         <div class="cart-item-image" style="background-image:url('${item.image}'); background-size:contain; background-position:center; background-repeat:no-repeat;"></div>
                         <div class="cart-item-details">
                             <h3>${item.name}</h3>
-                            <p><strong>Price:</strong> $${item.price}</p>
+                            <p><strong>Price:</strong> RM${item.price}</p>
                             <div class="quantity-controls">
                                 <label><strong>Quantity:</strong></label>
                                 <input type="number" value="${item.quantity}" min="1" onchange="updateQuantity(${index}, this.value)">
                             </div>
-                            <p><strong>Subtotal:</strong> $${(item.price * item.quantity).toFixed(2)}</p>
+                            <p><strong>Subtotal:</strong> RM${(item.price * item.quantity).toFixed(2)}</p>
                             <button onclick="removeFromCart(${index})" class="remove-btn">
                                 <span>🗑️</span> Remove
                             </button>
@@ -110,7 +110,7 @@
 
                 const totalDiv = document.createElement('div');
                 totalDiv.className = 'cart-total';
-                totalDiv.innerHTML = `<h3>Total: $${total.toFixed(2)}</h3>`;
+                totalDiv.innerHTML = `<h3>Total: RM${total.toFixed(2)}</h3>`;
                 cartItemsContainer.appendChild(totalDiv);
 
                 checkoutSection.style.display = 'block';
@@ -162,7 +162,7 @@
                     ['Customer Name', orderData.customerName],
                     ['Email', orderData.customerEmail],
                     ['Phone', orderData.customerPhone],
-                    ['Total Amount', '$' + orderData.totalAmount.toFixed(2)],
+                    ['Total Amount', 'RM' + orderData.totalAmount.toFixed(2)],
                     ['Order Date', orderData.orderDate],
                     [''],
                     ['Items Ordered']
@@ -175,9 +175,9 @@
                 orderData.items.forEach(item => {
                     customerInfo.push([
                         item['Product Name'],
-                        '$' + item['Price'],
+                        'RM' + item['Price'],
                         item['Quantity'],
-                        '$' + item['Subtotal']
+                        'RM' + item['Subtotal']
                     ]);
                 });
 
