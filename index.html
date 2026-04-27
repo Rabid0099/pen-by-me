@@ -113,11 +113,18 @@
                 message: form.querySelector('textarea[name="message"]').value
             };
             
-            fetch('https://script.google.com/macros/d/AKfycbzp6G-FEZntiN9UQyE_ilIgU4pqX_z9g2GF9zNM0xfuJl_-Uf0aWXPKsWeCAiBHoLYPrQ/userweb/do', {
+            fetch('https://script.google.com/macros/s/AKfycbzp6G-FEZntiN9UQyE_ilIgU4pqX_z9g2GF9zNM0xfuJl_-Uf0aWXPKsWeCAiBHoLYPrQ/exec', {
                 method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify(formData)
             })
             .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.json();
+            })
+            .then(data => {
                 const messageDiv = document.getElementById('homeFormMessage');
                 messageDiv.style.display = 'block';
                 messageDiv.style.backgroundColor = '#d4edda';
