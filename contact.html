@@ -40,14 +40,51 @@
             </div>
 
             <div class="contact-form-wrapper">
-                <form class="contact-form">
+                <form class="contact-form" id="contactForm">
                     <input type="text" name="name" placeholder="Your Name" required>
                     <input type="email" name="email" placeholder="Your Email" required>
                     <input type="text" name="subject" placeholder="Subject" required>
                     <textarea name="message" placeholder="Your Message" rows="6" required></textarea>
                     <button type="submit" class="submit-button">Send Message</button>
                 </form>
+                <div id="formMessage" style="display:none; margin-top:10px; padding:10px; border-radius:5px; text-align:center;"></div>
             </div>
+            
+            <script>
+                document.getElementById('contactForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const form = e.target;
+                    const formData = {
+                        name: form.querySelector('input[name="name"]').value,
+                        email: form.querySelector('input[name="email"]').value,
+                        subject: form.querySelector('input[name="subject"]').value,
+                        message: form.querySelector('textarea[name="message"]').value
+                    };
+                    
+                    fetch('https://script.google.com/macros/d/AKfycbzp6G-FEZntiN9UQyE_ilIgU4pqX_z9g2GF9zNM0xfuJl_-Uf0aWXPKsWeCAiBHoLYPrQ/userweb/do', {
+                        method: 'POST',
+                        body: JSON.stringify(formData)
+                    })
+                    .then(response => {
+                        const messageDiv = document.getElementById('formMessage');
+                        messageDiv.style.display = 'block';
+                        messageDiv.style.backgroundColor = '#d4edda';
+                        messageDiv.style.color = '#155724';
+                        messageDiv.textContent = 'Thank you! Your message has been sent successfully.';
+                        form.reset();
+                        setTimeout(() => {
+                            messageDiv.style.display = 'none';
+                        }, 5000);
+                    })
+                    .catch(error => {
+                        const messageDiv = document.getElementById('formMessage');
+                        messageDiv.style.display = 'block';
+                        messageDiv.style.backgroundColor = '#f8d7da';
+                        messageDiv.style.color = '#721c24';
+                        messageDiv.textContent = 'Error sending message. Please try again.';
+                    });
+                });
+            </script>
         </div>
     </main>
 
