@@ -115,16 +115,10 @@
             
             fetch('https://script.google.com/macros/s/AKfycbzJnCUzFcqAq2Aox6h2ET-JOcUOyg0JwA6X8psDL6wLrIvR5aSBGi1PmHAZ8KZzuHt0og/exec', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
+                mode: 'no-cors',
+                body: new URLSearchParams(formData)
             })
-            .then(response => {
-                if (!response.ok) throw new Error('Network response was not ok');
-                return response.json();
-            })
-            .then(data => {
+            .then(() => {
                 const messageDiv = document.getElementById('homeFormMessage');
                 messageDiv.style.display = 'block';
                 messageDiv.style.backgroundColor = '#d4edda';
