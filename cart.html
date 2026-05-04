@@ -61,7 +61,6 @@
         </div>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const cartItemsContainer = document.getElementById('cart-items');
@@ -138,94 +137,35 @@
                 const cart = JSON.parse(localStorage.getItem('cart')) || [];
                 const totalAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-                // Create order data for Excel
-                const orderData = {
-                    customerName,
-                    customerEmail,
-                    customerPhone,
-                    totalAmount,
-                    orderDate: new Date().toLocaleString(),
-                    items: cart.map(item => ({
-                        'Product Name': item.name,
-                        'Price': item.price,
-                        'Quantity': item.quantity,
-                        'Subtotal': item.price * item.quantity
-                    }))
-                };
-
-                // Create Excel file
-                const wb = XLSX.utils.book_new();
-                
-                // Customer info sheet
-                const customerInfo = [
-                    ['Order Information'],
-                    ['Customer Name', orderData.customerName],
-                    ['Email', orderData.customerEmail],
-                    ['Phone', orderData.customerPhone],
-                    ['Total Amount', 'RM' + orderData.totalAmount.toFixed(2)],
-                    ['Order Date', orderData.orderDate],
-                    [''],
-                    ['Items Ordered']
-                ];
-                
-                // Add item headers
-                customerInfo.push(['Product Name', 'Price', 'Quantity', 'Subtotal']);
-                
-                // Add each item
-                orderData.items.forEach(item => {
-                    customerInfo.push([
-                        item['Product Name'],
-                        'RM' + item['Price'],
-                        item['Quantity'],
-                        'RM' + item['Subtotal']
-                    ]);
-                });
-
-                const ws1 = XLSX.utils.aoa_to_sheet(customerInfo);
-                XLSX.utils.book_append_sheet(wb, ws1, 'Order Details');
-
-                // Generate filename with timestamp
-                const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
-                const filename = `Matador_Order_${timestamp}.xlsx`;
-
-                // Save file
-                XLSX.writeFile(wb, filename);
-
-                // Send to Google Sheet
-                const googleSheetURL = 'https://script.google.com/macros/s/AKfycbwCLaiRHeLpr82m0nXeguR9ID0qIhRzXC3WyxfJ-OXKNdHnI4yrYctht8JgMjBVUZXX/exec';
-                
-                const googleSheetData = {
-                    customerName,
-                    customerEmail,
-                    customerPhone,
-                    products: cart,
-                    totalAmount
-                };
-
-                if (navigator.onLine) {
-                    fetch(googleSheetURL, {
-                        method: 'POST',
-                        body: JSON.stringify(googleSheetData)
+                // Send order to server database
+                fetch('/api/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        customerName,
+                        customerEmail,
+                        customerPhone,
+                        cartItems: cart,
+                        totalAmount
                     })
-                    .then(response => {
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
                         // Clear cart and show success message
                         localStorage.removeItem('cart');
-                        alert('✅ Order successfully saved to Google Sheet!\n✅ Excel file also saved on your computer!\nYour cart has been cleared.');
+                        alert('✅ Order placed successfully!\nOrder ID: ' + data.orderId + '\nWe will contact you soon.');
                         loadCart();
-                    })
-                    .catch(error => {
-                        console.error('Error sending to Google Sheet:', error);
-                        // Still clear cart since Excel was saved
-                        localStorage.removeItem('cart');
-                        alert('Order saved locally to Excel! Google Sheet sync failed, but you can retry later.');
-                        loadCart();
-                    });
-                } else {
-                    // Offline mode
-                    localStorage.removeItem('cart');
-                    alert('📱 Offline mode: Order saved to Excel only.\nWill sync to Google Sheet when online.');
-                    loadCart();
-                }
+                    } else {
+                        alert('❌ Error placing order: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('❌ Error placing order. Please try again.');
+                });
             });
 
             loadCart();

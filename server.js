@@ -2,9 +2,24 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
+const sqlite3 = require('sqlite3').verbose();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Database setup
+const db = new sqlite3.Database('./orders.db');
+db.serialize(() => {
+  db.run(`CREATE TABLE IF NOT EXISTS orders (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    customerName TEXT,
+    customerEmail TEXT,
+    customerPhone TEXT,
+    cartItems TEXT,
+    totalAmount REAL,
+    orderDate TEXT
+  )`);
+});
 
 // Middleware
 app.use(cors());
@@ -51,22 +66,20 @@ app.get('/api/products/:id', (req, res) => {
 app.post('/api/orders', (req, res) => {
   const { customerName, customerEmail, customerPhone, cartItems, totalAmount } = req.body;
 
-  // In real app, save to database
-  console.log('New Order:', {
-    customerName,
-    customerEmail,
-    customerPhone,
-    cartItems,
-    totalAmount,
-    orderDate: new Date()
-  });
-
-  // Send success response
-  res.json({
-    success: true,
-    message: 'Order placed successfully! We will contact you soon.',
-    orderId: Date.now() // Simple order ID
-  });
+  // Save to database
+  db.run(`INSERT INTO orders (customerName, customerEmail, customerPhone, cartItems, totalAmount, orderDate) VALUES (?, ?, ?, ?, ?, ?)`, 
+    [customerName, customerEmail, customerPhone, JSON.stringify(cartItems), totalAmount, new Date().toISOString()], 
+    function(err) {
+      if (err) {
+        console.error('Error saving order:', err);
+        return res.status(500).json({ success: false, message: 'Error saving order' });
+      }
+      res.json({
+        success: true,
+        message: 'Order placed successfully! We will contact you soon.',
+        orderId: this.lastID
+      });
+    });
 });
 
 // Start server
