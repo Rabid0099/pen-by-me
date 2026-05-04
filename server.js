@@ -2,24 +2,30 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
-const sqlite3 = require('sqlite3').verbose();
+const mongoose = require('mongoose');
+require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Database setup
-const db = new sqlite3.Database('./orders.db');
-db.serialize(() => {
-  db.run(`CREATE TABLE IF NOT EXISTS orders (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    customerName TEXT,
-    customerEmail TEXT,
-    customerPhone TEXT,
-    cartItems TEXT,
-    totalAmount REAL,
-    orderDate TEXT
-  )`);
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error('MongoDB connection error:', err));
+
+// Order Schema
+const orderSchema = new mongoose.Schema({
+  customerName: String,
+  customerEmail: String,
+  customerPhone: String,
+  cartItems: Array,
+  totalAmount: Number,
+  orderDate: { type: Date, default: Date.now }
 });
+
+const Order = mongoose.model('Order', orderSchema);
 
 // Middleware
 app.use(cors());
@@ -63,23 +69,28 @@ app.get('/api/products/:id', (req, res) => {
 });
 
 // Submit order
-app.post('/api/orders', (req, res) => {
+app.post('/api/orders', async (req, res) => {
   const { customerName, customerEmail, customerPhone, cartItems, totalAmount } = req.body;
 
-  // Save to database
-  db.run(`INSERT INTO orders (customerName, customerEmail, customerPhone, cartItems, totalAmount, orderDate) VALUES (?, ?, ?, ?, ?, ?)`, 
-    [customerName, customerEmail, customerPhone, JSON.stringify(cartItems), totalAmount, new Date().toISOString()], 
-    function(err) {
-      if (err) {
-        console.error('Error saving order:', err);
-        return res.status(500).json({ success: false, message: 'Error saving order' });
-      }
-      res.json({
-        success: true,
-        message: 'Order placed successfully! We will contact you soon.',
-        orderId: this.lastID
-      });
+  try {
+    const newOrder = new Order({
+      customerName,
+      customerEmail,
+      customerPhone,
+      cartItems,
+      totalAmount
     });
+
+    const savedOrder = await newOrder.save();
+    res.json({
+      success: true,
+      message: 'Order placed successfully! We will contact you soon.',
+      orderId: savedOrder._id
+    });
+  } catch (error) {
+    console.error('Error saving order:', error);
+    res.status(500).json({ success: false, message: 'Error saving order' });
+  }
 });
 
 // Start server
